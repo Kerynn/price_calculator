@@ -1,11 +1,44 @@
 package prices
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"bufio"
+)
 
 type TaxIncludedPriceJob struct {
 	TaxRate float64
 	InputPrices []float64
 	TaxIncludedPrices map[string]float64
+}
+
+func (job TaxIncludedPriceJob) LoadData() {
+	file, err := os.Open("prices.txt")
+
+	if err != nil {
+		fmt.Println("Could not open file")
+		fmt.Println(err)
+		return
+	}
+
+	scanner := bufio.NewScanner(file)
+
+	var lines []string
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	err = scanner.Err()
+
+	if err != nil {
+		fmt.Println("Failed to read file content")
+		fmt.Println(err)
+		file.Close()
+		return
+	}
+
+	
 }
 
 func (job TaxIncludedPriceJob) Process() {
